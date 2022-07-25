@@ -18,14 +18,14 @@ app.use(express.json())
 app.use(cors())
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.0qtlc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://Cust-Club:$vetO4B3BvQB0F2Eb@cluster0.0qtlc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function run() {
     try {
-      const database = client.db('sample_mflix');
-      const movies = database.collection('movies');
+      const database = client.db('Cust-Club');
+      const movies = database.collection('Events');
      
     } finally {
       // Ensures that the client will close when you finish/error
@@ -53,3 +53,4 @@ async function run() {
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
   })
+
