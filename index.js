@@ -1,38 +1,92 @@
 const { MongoClient, Admin } = require("mongodb");
-const Objectid=require('mongodb').ObjectId;
-const express=require('express');
-const cors=require('cors');
+const Objectid = require('mongodb').ObjectId;
+const express = require('express');
+const cors = require('cors');
 require("dotenv").config();
 
+// USED FOR READING FILE IN EXPRESS//
+const fileUpload = require('express-fileupload')
 
-const app=(express())
+const app = (express())
 
 
 
 
 
-const port =process.env.PORT || 9000;
+const port = process.env.PORT || 9000;
 
 
 app.use(express.json())
 app.use(cors())
+app.use(fileUpload())
 
 
-const uri = `mongodb+srv://Cust-Club:$vetO4B3BvQB0F2Eb@cluster0.0qtlc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+// MONGO DB CONNECTION URI ////
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.0qtlc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
+// MONGO CLIENT ///
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+
+// MAIN PROCESS START //
+
 async function run() {
-    try {
-      const database = client.db('Cust-Club');
-      const movies = database.collection('Events');
-     
-    } finally {
-      // Ensures that the client will close when you finish/error
+  try {
+
+    // Check Connections //
+    console.log("connected");
+    // DATABASE NAME AND CHILDS ///
+    const database = client.db('Cust-Club');
+    const EventsCollection = database.collection('Events');
+
+
+
+
+    // GET EVENTS DATA ///
+    app.get('/events', async (req, res) => {
+
+      const cursor = EventsCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result)
+    })
+
+    // POST EVENT DATA INTO DATABASE //
+    app.post('/events', async (req, res) => {
+      // Rcive data from front end //
+      const data = req.body;
+      const title = data.title;
+      const time = data.time;
+      const description = data.description;
+      // Recive file with data// 
+      const files = req.files.image.data;
+      // Process ImageFille with base64 Encrytion ///
+      const encodedImage = files.toString('base64');
+      const imageBuffer = Buffer.from(encodedImage, "base64");
+
+      // Create Event Object and store in mongoDb //
+
+      const event = {
+        time, title, description,
+        image: imageBuffer
+      };
+
+
+      // Insert the object in databse///
+      const result = await EventsCollection.insertOne(event)
+
+      // send respons to user //
+      res.json(result)
+
+    })
+
+  } finally {
+    // Ensures that the client will close when you finish/error
     //   await client.close();
-    }
   }
-  run().catch(console.dir);
+}
+run().catch(console.dir);
 
 
 
@@ -42,15 +96,15 @@ async function run() {
 
 //   Check Server Is rurring ///
 
-  app.get('/',async(req,res)=>{
-           
-    res.send("server Running")
-          
- 
-   })
+app.get('/', async (req, res) => {
+
+  res.send("server Running")
 
 
-  app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-  })
+})
+
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
 
