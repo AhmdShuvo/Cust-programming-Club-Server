@@ -119,7 +119,7 @@ async function run() {
 
     // Get Current Events //
 
-    app.get('/comingevents', async (req, res) => {
+    app.get('/commingevents', async (req, res) => {
       const cursor = UpcommingEventsCollection.find({});
       const result = await cursor.toArray();
       res.json(result);
