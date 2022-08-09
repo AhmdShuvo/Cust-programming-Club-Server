@@ -44,6 +44,7 @@ async function run() {
 
     // Current EVENT //
     const CurrentEventsCollection = database.collection('currentEvents');
+    const UsersCollection=database.collection('Users')
 
 
 
@@ -138,6 +139,38 @@ async function run() {
 
       res.send(result)
     })
+
+
+    // EVENTS PROCESSING END ///
+
+    // Manage Users ///
+
+    // POST USER DATA //
+ app.post('/users', async (req,res)=>{
+
+  const user=req.body;
+
+        const result=await UsersCollection.insertOne(user);
+
+        res.send(result)
+ }) 
+
+//  CHECK IF LOGEDING USER IS ADMIN //
+        
+ app.get('/user/admin/:email', async(req,res)=>{
+
+  const email= req.params.email;
+   let isAdmin=false
+  const query={email:email}
+  const user=await UsersCollection.findOne(query);
+
+  if(user?.role==="admin"){
+    isAdmin=true
+
+  }
+
+  res.json({admin : isAdmin})
+})
 
   } finally {
     // Ensures that the client will close when you finish/error
