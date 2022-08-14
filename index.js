@@ -45,6 +45,7 @@ async function run() {
     // Current EVENT //
     const CurrentEventsCollection = database.collection('currentEvents');
     const UsersCollection=database.collection('Users')
+    const NoticeCollection=database.collection('Notice');
 
 
 
@@ -171,6 +172,23 @@ async function run() {
 
   res.json({admin : isAdmin})
 })
+
+ 
+// POST NOTICE //
+ app.post('/notice',async(req,res)=>{
+  const notice=req.body;
+  const result=await NoticeCollection.insertOne(notice);
+
+  res.json(result)
+
+ })
+
+ app.get('/notice',async(req,res)=>{
+const cursor=NoticeCollection.find({});
+const result=await cursor.toArray();
+res.send(result);
+
+ })
 
   } finally {
     // Ensures that the client will close when you finish/error
