@@ -157,6 +157,39 @@ async function run() {
         res.send(result)
  }) 
 
+//  CHECK IF LOGEDING USER IS ADMIN //
+        
+ app.get('/user/admin/:email', async(req,res)=>{
+
+  const email= req.params.email;
+   let isAdmin=false
+  const query={email:email}
+  const user=await UsersCollection.findOne(query);
+
+  if(user?.role==="admin"){
+    isAdmin=true
+
+  }
+
+  res.json({admin : isAdmin})
+})
+
+ 
+// POST NOTICE //
+ app.post('/notice',async(req,res)=>{
+  const notice=req.body;
+  const result=await NoticeCollection.insertOne(notice);
+
+  res.json(result)
+
+ })
+
+ app.get('/notice',async(req,res)=>{
+const cursor=NoticeCollection.find({});
+const result=await cursor.toArray();
+res.send(result);
+
+ })
 
   } finally {
     // Ensures that the client will close when you finish/error
