@@ -173,6 +173,22 @@ async function run() {
 })
 
  
+// POST NOTICE //
+ app.post('/notice',async(req,res)=>{
+  const notice=req.body;
+  const result=await NoticeCollection.insertOne(notice);
+
+  res.json(result)
+
+ })
+
+//  Get Notice ///
+ app.get('/notice',async(req,res)=>{
+const cursor=NoticeCollection.find({});
+const result=await cursor.toArray();
+res.send(result);
+ })
+
 
 
   } finally {
@@ -201,4 +217,3 @@ app.get('/', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
-
