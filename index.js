@@ -5,7 +5,8 @@ const cors = require('cors');
 require("dotenv").config();
 
 // USED FOR READING FILE IN EXPRESS//
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
+const { response } = require("express");
 
 const app = (express())
 
@@ -45,6 +46,7 @@ async function run() {
     // Current EVENT //
     const CurrentEventsCollection = database.collection('currentEvents');
     const UsersCollection=database.collection('Users')
+    const BlogsCollection=database.collection('Blogs')
 
 
 
@@ -164,6 +166,8 @@ async function run() {
   const query={email:email}
   const user=await UsersCollection.findOne(query);
 
+
+  
   if(user?.role==="admin"){
     isAdmin=true
 
@@ -172,6 +176,20 @@ async function run() {
   res.json({admin : isAdmin})
 })
 
+// MANGE BLOGS DATA //
+
+app.post("/blogs",async(req,res)=>{
+const data=req.body;
+const result=await BlogsCollection.insertOne(data);
+res.send(result)
+});
+
+app.get("/blogs",async(req,res)=>{
+ const cursor= BlogsCollection.find({});
+ const result= await cursor.toArray();
+ res.json(result)
+
+})
   } finally {
     // Ensures that the client will close when you finish/error
     //   await client.close();
