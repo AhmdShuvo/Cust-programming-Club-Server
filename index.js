@@ -183,12 +183,15 @@ async function run() {
 
  })
 
+
+//  Get Notice ///
  app.get('/notice',async(req,res)=>{
 const cursor=NoticeCollection.find({});
 const result=await cursor.toArray();
 res.send(result);
-
  })
+
+
 
   } finally {
     // Ensures that the client will close when you finish/error
