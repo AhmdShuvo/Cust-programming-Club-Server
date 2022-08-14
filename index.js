@@ -5,8 +5,7 @@ const cors = require('cors');
 require("dotenv").config();
 
 // USED FOR READING FILE IN EXPRESS//
-const fileUpload = require('express-fileupload');
-const { response } = require("express");
+const fileUpload = require('express-fileupload')
 
 const app = (express())
 
@@ -46,7 +45,6 @@ async function run() {
     // Current EVENT //
     const CurrentEventsCollection = database.collection('currentEvents');
     const UsersCollection=database.collection('Users')
-    const BlogsCollection=database.collection('Blogs')
 
 
 
@@ -175,21 +173,7 @@ async function run() {
 })
 
  
-// POST NOTICE //
- app.post('/notice',async(req,res)=>{
-  const notice=req.body;
-  const result=await NoticeCollection.insertOne(notice);
 
-  res.json(result)
-
- })
-
- app.get('/notice',async(req,res)=>{
-const cursor=NoticeCollection.find({});
-const result=await cursor.toArray();
-res.send(result);
-
- })
 
   } finally {
     // Ensures that the client will close when you finish/error
@@ -208,7 +192,7 @@ run().catch(console.dir);
 
 app.get('/', async (req, res) => {
 
-  res.send("server Running")
+  res.send("server Running too efficiently")
 
 
 })
