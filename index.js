@@ -159,7 +159,42 @@ app.get('/', async (req, res) => {
   res.send("server Running")
 
 
+});
+
+
+//  CHECK IF LOGEDING USER IS ADMIN //
+        
+app.get('/user/admin/:email', async(req,res)=>{
+
+  const email= req.params.email;
+   let isAdmin=false
+  const query={email:email}
+  const user=await UsersCollection.findOne(query);
+
+
+  
+  if(user?.role==="admin"){
+    isAdmin=true
+
+  }
+
+  res.json({admin : isAdmin})
 })
+
+// MANGE BLOGS DATA //
+
+app.post("/blogs",async(req,res)=>{
+const data=req.body;
+const result=await BlogsCollection.insertOne(data);
+res.send(result)
+});
+
+app.get("/blogs",async(req,res)=>{
+ const cursor= BlogsCollection.find({});
+ const result= await cursor.toArray();
+ res.json(result)
+
+});
 
 
 app.listen(port, () => {
