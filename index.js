@@ -183,7 +183,6 @@ async function run() {
 
  })
 
-
 //  Get Notice ///
  app.get('/notice',async(req,res)=>{
 const cursor=NoticeCollection.find({});
