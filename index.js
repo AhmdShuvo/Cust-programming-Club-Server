@@ -45,6 +45,7 @@ async function run() {
     // Current EVENT //
     const CurrentEventsCollection = database.collection('currentEvents');
     const UsersCollection=database.collection('Users')
+    const NoticeCollection=database.collection('Notice')
 
 
 
