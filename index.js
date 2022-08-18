@@ -44,8 +44,8 @@ async function run() {
 
     // Current EVENT //
     const CurrentEventsCollection = database.collection('currentEvents');
-    const UsersCollection=database.collection('Users')
-    const NoticeCollection=database.collection('Notice')
+    const UsersCollection = database.collection('Users')
+    const NoticeCollection = database.collection('Notice')
 
 
 
@@ -134,12 +134,14 @@ async function run() {
     app.delete('/currentevents/:id', async (req, res) => {
 
       const id = req.params.id;
-      const query={_id: Objectid(id)}
-       
-      const result=await CurrentEventsCollection.deleteOne(query);
+      const query = { _id: Objectid(id) }
+
+      const result = await CurrentEventsCollection.deleteOne(query);
 
       res.send(result)
     })
+
+
 
 
     // EVENTS PROCESSING END ///
@@ -147,48 +149,60 @@ async function run() {
     // Manage Users ///
 
     // POST USER DATA //
- app.post('/users', async (req,res)=>{
+    app.post('/users', async (req, res) => {
 
-  const user=req.body;
+      const user = req.body;
 
-        const result=await UsersCollection.insertOne(user);
+      const result = await UsersCollection.insertOne(user);
 
-        res.send(result)
- }) 
+      res.send(result)
+    })
 
-//  CHECK IF LOGEDING USER IS ADMIN //
-        
- app.get('/user/admin/:email', async(req,res)=>{
+    //  CHECK IF LOGEDING USER IS ADMIN //
 
-  const email= req.params.email;
-   let isAdmin=false
-  const query={email:email}
-  const user=await UsersCollection.findOne(query);
+    app.get('/user/admin/:email', async (req, res) => {
 
-  if(user?.role==="admin"){
-    isAdmin=true
+      const email = req.params.email;
+      let isAdmin = false
+      const query = { email: email }
+      const user = await UsersCollection.findOne(query);
 
-  }
+      if (user?.role === "admin") {
+        isAdmin = true
 
-  res.json({admin : isAdmin})
-})
+      }
 
- 
-// POST NOTICE //
- app.post('/notice',async(req,res)=>{
-  const notice=req.body;
-  const result=await NoticeCollection.insertOne(notice);
+      res.json({ admin: isAdmin })
+    })
 
-  res.json(result)
 
- })
+    // POST NOTICE //
+    app.post('/notice', async (req, res) => {
+      const notice = req.body;
+      const result = await NoticeCollection.insertOne(notice);
 
-//  Get Notice ///
- app.get('/notice',async(req,res)=>{
-const cursor=NoticeCollection.find({});
-const result=await cursor.toArray();
-res.send(result);
- })
+      res.json(result)
+
+    })
+
+    //  Get Notice ///
+    app.get('/notice', async (req, res) => {
+      const cursor = NoticeCollection.find({});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // Get Notice BY ID ///
+
+
+    app.get("/notice/:id", async (req, res) => {
+
+      const id = req.params.id;
+      const query = { _id: Objectid(id) }
+
+      const result = await NoticeCollection.findOne(query);
+      res.json(result)
+    });
 
 
 
