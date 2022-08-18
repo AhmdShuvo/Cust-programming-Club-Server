@@ -46,6 +46,7 @@ async function run() {
     const CurrentEventsCollection = database.collection('currentEvents');
     const UsersCollection = database.collection('Users')
     const NoticeCollection = database.collection('Notice')
+    const BlogsCollection = database.collection('Blogs')
 
 
 
@@ -173,7 +174,28 @@ async function run() {
       }
 
       res.json({ admin: isAdmin })
-    })
+    });
+    
+//  CHECK IF LOGEDING USER IS APPROVED //
+        
+app.get('/user/admin/:email', async(req,res)=>{
+
+  const email= req.params.email;
+   let isapproved=false
+  const query={email:email}
+  const user=await UsersCollection.findOne(query);
+
+
+  
+  if(user?.status==="approved"){
+    isapproved=true
+
+  }
+
+  res.json({approved : isapproved})
+})
+
+
 
 
     // POST NOTICE //
@@ -204,6 +226,21 @@ async function run() {
       res.json(result)
     });
 
+    
+// MANGE BLOGS DATA //
+
+app.post("/blogs",async(req,res)=>{
+  const data=req.body;
+  const result=await BlogsCollection.insertOne(data);
+  res.send(result)
+  });
+  
+  app.get("/blogs",async(req,res)=>{
+   const cursor= BlogsCollection.find({});
+   const result= await cursor.toArray();
+   res.json(result)
+  
+  });
 
 
   } finally {
@@ -228,40 +265,6 @@ app.get('/', async (req, res) => {
 
 });
 
-
-//  CHECK IF LOGEDING USER IS ADMIN //
-        
-app.get('/user/admin/:email', async(req,res)=>{
-
-  const email= req.params.email;
-   let isAdmin=false
-  const query={email:email}
-  const user=await UsersCollection.findOne(query);
-
-
-  
-  if(user?.role==="admin"){
-    isAdmin=true
-
-  }
-
-  res.json({admin : isAdmin})
-})
-
-// MANGE BLOGS DATA //
-
-app.post("/blogs",async(req,res)=>{
-const data=req.body;
-const result=await BlogsCollection.insertOne(data);
-res.send(result)
-});
-
-app.get("/blogs",async(req,res)=>{
- const cursor= BlogsCollection.find({});
- const result= await cursor.toArray();
- res.json(result)
-
-});
 
 
 app.listen(port, () => {
