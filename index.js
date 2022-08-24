@@ -178,7 +178,7 @@ async function run() {
     
 //  CHECK IF LOGEDING USER IS APPROVED //
         
-app.get('/user/admin/:email', async(req,res)=>{
+app.get('/user/approv/:email', async(req,res)=>{
 
   const email= req.params.email;
    let isapproved=false
@@ -193,6 +193,15 @@ app.get('/user/admin/:email', async(req,res)=>{
   }
 
   res.json({approved : isapproved})
+})
+
+app.get('/users',async(req,res)=>{
+
+  const query=UsersCollection.find({});
+
+  const result=await query.toArray();
+
+  res.json(result)
 })
 
 
