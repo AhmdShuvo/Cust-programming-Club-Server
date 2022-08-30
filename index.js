@@ -140,6 +140,18 @@ async function run() {
       const result = await CurrentEventsCollection.deleteOne(query);
 
       res.send(result)
+    });
+
+
+    // GEt Cuurent Events by id //
+    app.get('/currentevents/:id', async (req, res) => {
+
+      const id = req.params.id;
+      const query = { _id: Objectid(id) }
+
+      const result = await CurrentEventsCollection.findOne(query);
+
+      res.send(result)
     })
 
 
@@ -244,6 +256,18 @@ app.post("/blogs",async(req,res)=>{
   res.send(result)
   });
   
+// GET SINGLE BLOG WITH ID ///
+
+app.get("/blog/:id", async (req, res) => {
+
+  const id = req.params.id;
+  const query = { _id: Objectid(id) }
+
+  const result = await BlogsCollection.findOne(query);
+  res.json(result)
+});
+
+
   app.get("/blogs",async(req,res)=>{
    const cursor= BlogsCollection.find({});
    const result= await cursor.toArray();
