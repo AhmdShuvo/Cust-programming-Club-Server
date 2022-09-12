@@ -233,7 +233,49 @@ app.get('/users',async(req,res)=>{
 })
 
 
+ //  update Admin ROle ///
 
+ app.put('/users',async(req,res)=>{
+
+  const user=req.body;
+  const filter={email:user.email}
+ 
+
+  console.log(user.email);
+
+  const updateDoc = {
+    $set: {
+      role: "admin"
+    },
+  };
+
+  const result=await UsersCollection.updateOne(filter,updateDoc);
+
+res.json(result)
+ 
+})
+
+
+
+
+    //  change pending to approved//
+    app.put("/user/:id",async(req,res)=>{
+      const id=req.params.id;
+    console.log(id);
+     const filter={_id: Objectid(id)}
+     const options = { upsert: false };
+     const updateDoc = {
+      $set: {
+        status: "approved"
+      },
+      
+
+    }
+    const result= await UsersCollection.updateOne(filter,updateDoc,options)
+     
+
+
+       res.json(result)})
 
 // MANAGE USERS END ////
 
@@ -263,6 +305,17 @@ app.get('/users',async(req,res)=>{
       const query = { _id: Objectid(id) }
 
       const result = await NoticeCollection.findOne(query);
+      res.json(result)
+    });
+
+    // Delete Notice ////
+
+    app.delete("/notice/:id", async (req, res) => {
+
+      const id = req.params.id;
+      const query = { _id: Objectid(id) }
+
+      const result = await NoticeCollection.deleteOne(query);
       res.json(result)
     });
 
