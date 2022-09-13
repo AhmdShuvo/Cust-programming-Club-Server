@@ -161,32 +161,8 @@ async function run() {
 
     // Manage Users ///
 
-    // POST USER DATA //
-    app.post('/users', async (req, res) => {
 
-      const user = req.body;
 
-      const result = await UsersCollection.insertOne(user);
-
-      res.send(result)
-    })
-
-    //  CHECK IF LOGEDING USER IS ADMIN //
-
-    app.get('/user/admin/:email', async (req, res) => {
-
-      const email = req.params.email;
-      let isAdmin = false
-      const query = { email: email }
-      const user = await UsersCollection.findOne(query);
-
-      if (user?.role === "admin") {
-        isAdmin = true
-
-      }
-
-      res.json({ admin: isAdmin })
-    });
     
 //  CHECK IF LOGEDING USER IS APPROVED //
         
@@ -206,31 +182,7 @@ app.get('/user/approv/:email', async(req,res)=>{
 
   res.json({approved : isapproved})
 })
-app.get('/user/admin/:email', async(req,res)=>{
 
-  const email= req.params.email;
-   let isadmin=false
-  const query={email:email}
-  const user=await UsersCollection.findOne(query);
-
-
-  
-  if(user?.role==="admin"){
-    isAdmin=true
-
-  }
-
-  res.json({admin : isAdmin})
-})
-
-app.get('/users',async(req,res)=>{
-
-  const query=UsersCollection.find({});
-
-  const result=await query.toArray();
-
-  res.json(result)
-})
 
 
  //  update Admin ROle ///
