@@ -161,25 +161,8 @@ async function run() {
 
     // Manage Users ///
 
-    // POST USER DATA //
-  
 
-    //  CHECK IF LOGEDING USER IS ADMIN //
 
-    app.get('/user/admin/:email', async (req, res) => {
-
-      const email = req.params.email;
-      let isAdmin = false
-      const query = { email: email }
-      const user = await UsersCollection.findOne(query);
-
-      if (user?.role === "admin") {
-        isAdmin = true
-
-      }
-
-      res.json({ admin: isAdmin })
-    });
     
 //  CHECK IF LOGEDING USER IS APPROVED //
         
