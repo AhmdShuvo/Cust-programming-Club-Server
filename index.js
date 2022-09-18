@@ -163,7 +163,7 @@ async function run() {
 
     
 
-    // POST USER DATA //
+    // POST USER DATA     //
     app.post('/users', async (req, res) => {
 
       const user = req.body;
